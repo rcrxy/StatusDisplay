@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup><EmbeddedResource Include="../../data/q6-pro-ansi.json" Link="q6-pro-ansi.json" /></ItemGroup>
+</Project>

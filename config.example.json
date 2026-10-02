@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "nextCreationOrder": 3,
+  "rules": [
+    {
+      "id": "audio.speaker",
+      "name": "音响",
+      "creationOrder": 1,
+      "source": { "type": "windows.audio.defaultPlayback", "role": "multimedia" },
+      "match": { "endpointId": "REPLACE_WITH_SPEAKER_ENDPOINT_ID" },
+      "display": [
+        { "row": 0, "column": 17, "override": true, "color": "#FFFFFF" },
+        { "row": 0, "column": 18, "override": true, "color": "#000000" }
+      ]
+    },
+    {
+      "id": "audio.headphones",
+      "name": "耳机",
+      "creationOrder": 2,
+      "source": { "type": "windows.audio.defaultPlayback", "role": "multimedia" },
+      "match": { "endpointId": "REPLACE_WITH_HEADPHONES_ENDPOINT_ID" },
+      "display": [
+        { "row": 0, "column": 17, "override": true, "color": "#000000" },
+        { "row": 0, "column": 18, "override": true, "color": "#FFFFFF" }
+      ]
+    }
+  ]
+}
