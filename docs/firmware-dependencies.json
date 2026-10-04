@@ -1,0 +1,9 @@
+{
+  "source": "https://github.com/Keychron/qmk_firmware/tree/666862cb8123b64a6b96718d739c6203ad99031f",
+  "localFirmwareBase": "90c4dd8ca3c2e24f9012270d4e6dac180cf06862",
+  "dependencies": [
+    { "path": "lib/chibios", "repository": "https://github.com/Keychron/ChibiOS.git", "commit": "86a3ed9baf621c19b72fdcd7429a88c9f3237a1f" },
+    { "path": "lib/chibios-contrib", "repository": "https://github.com/Keychron/ChibiOS-Contrib", "commit": "5dbc2a078f5f10a10af053e1255dcc34fda333f8" },
+    { "path": "lib/printf", "repository": "https://github.com/qmk/printf", "commit": "c2e3b4e10d281e7f0f694d3ecbd9f320977288cc" }
+  ]
+}
