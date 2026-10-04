@@ -1,12 +1,14 @@
 param(
-    [string]$FirmwareRoot = 'D:\Workspace\KeyboardFirmware',
-    [string]$Distribution = 'Ubuntu-24.04'
+    [string]$FirmwareRoot = '',
+    [string]$Distribution = 'Ubuntu-24.04',
+    [string]$BoardDefinition = 'keyboards/keychron/q6_pro/ansi_encoder/keyboard.json'
 )
 $ErrorActionPreference = 'Stop'
 $workspace = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
+if ([string]::IsNullOrEmpty($FirmwareRoot)) { $FirmwareRoot = Join-Path $workspace '.firmware-stage/qmk-wls_2025q1' }
 $firmware = (Resolve-Path -LiteralPath $FirmwareRoot).Path
 $output = Join-Path $workspace '.firmware-stage/end-to-end'
-dotnet run --project (Join-Path $PSScriptRoot 'HostLed.EndToEnd.csproj') -- $firmware $output
+dotnet run --project (Join-Path $PSScriptRoot 'HostLed.EndToEnd.csproj') -- $firmware $output $BoardDefinition
 if ($LASTEXITCODE -ne 0) { throw 'End-to-end trace generation failed' }
 
 function LinuxPath([string]$Path) {

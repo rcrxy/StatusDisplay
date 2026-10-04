@@ -3,7 +3,7 @@
 在 StatusDisplay 根目录执行：
 
 ```powershell
-./tests/HostLed.EndToEnd/run.ps1 -FirmwareRoot D:/Workspace/KeyboardFirmware -Distribution Ubuntu-24.04
+./tests/HostLed.EndToEnd/run.ps1 -Distribution Ubuntu-24.04
 ```
 
 需要 Windows .NET 10 SDK，以及指定 WSL 发行版中的 GCC 和 ASan/UBSan。无需连接键盘，不会发送 USB 数据、刷写固件或修改固件仓库。
@@ -14,7 +14,13 @@ JSON → `ConfigReader` → `RuleEngine` → `SnapshotReportCodec` → 32 字节
 
 C# 先核对规则结果，再生成 BEGIN / DATA / COMMIT / STATUS / INFO 报文。C 回放程序调用固件的 VIA 自定义回调，核对返回码、身份回显、DATA 回显及查询进度；在提交前后核对全部 108 个 LED 的覆盖状态和 RGB 值。预期画面在场景中独立指定，不从规则引擎输出推导。
 
-每帧先模拟普通灯效颜色，再调用分块及末块 RGB 回调：已释放的键必须保留普通灯效，强制黑色的键必须仍被覆盖。亮度、RGB 关闭和重新开启均有检查。板型映射取自指定固件仓库的 `keyboards/keychron/q6_pro/ansi_encoder/info.json`，并与软件元数据及固件已有测试映射逐项核对。
+每帧先模拟普通灯效颜色，再调用分块及末块 RGB 回调：已释放的键必须保留普通灯效，强制黑色的键必须仍被覆盖。亮度、RGB 关闭和重新开启均有检查。板型映射取自新分支的 `keyboards/keychron/q6_pro/ansi_encoder/keyboard.json`，并与软件元数据及固件已有测试映射逐项核对。
+
+默认固件工作树为 `.firmware-stage/qmk-wls_2025q1`。测试原方案时必须明确指定两项：
+
+```powershell
+./tests/HostLed.EndToEnd/run.ps1 -FirmwareRoot D:/Workspace/KeyboardFirmware -BoardDefinition keyboards/keychron/q6_pro/ansi_encoder/info.json
+```
 
 ## 覆盖范围
 

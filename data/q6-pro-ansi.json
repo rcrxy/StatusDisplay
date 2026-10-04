@@ -1,6 +1,6 @@
 {
-  "sourceCommit": "90c4dd8ca3c2e24f9012270d4e6dac180cf06862",
-  "sourcePath": "keyboards/keychron/q6_pro/ansi_encoder/info.json",
+  "sourceCommit": "c8b2b237b4ef09765e48cbb5c1fdb0afd164289f",
+  "sourcePath": "keyboards/keychron/q6_pro/ansi_encoder/keyboard.json",
   "rows": 6,
   "columns": 21,
   "leds": [

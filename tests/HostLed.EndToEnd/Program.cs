@@ -2,11 +2,11 @@ using System.Buffers.Binary;
 using System.Text.Json;
 using HostLed;
 
-if (args.Length != 2) throw new ArgumentException("需要固件仓库路径和输出目录");
+if (args.Length != 3) throw new ArgumentException("需要固件仓库路径、输出目录和板型定义路径");
 var firmware = Path.GetFullPath(args[0]);
 var output = Path.GetFullPath(args[1]);
 Directory.CreateDirectory(output);
-using var board = JsonDocument.Parse(File.ReadAllText(Path.Combine(firmware, "keyboards/keychron/q6_pro/ansi_encoder/info.json")));
+using var board = JsonDocument.Parse(File.ReadAllText(Path.Combine(firmware, args[2])));
 var map = Enumerable.Repeat((byte)255, 126).ToArray();
 var positions = new List<KeyPosition>();
 foreach (var led in board.RootElement.GetProperty("rgb_matrix").GetProperty("layout").EnumerateArray())

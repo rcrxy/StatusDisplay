@@ -4,6 +4,7 @@ Windows 结算状态规则，QMK 固件显示最终 RGB 覆盖。本项目已开
 
 - [最新开发规格](docs/开发方案.md)
 - [协议边界与待冻结内容](docs/protocol.md)
+- [固件版本核对与迁移记录](docs/固件版本核对.md)
 
 ## 当前完成范围
 
@@ -14,16 +15,17 @@ render 使用明确传入的模拟设备 ID，不读取 Windows 实际音频状�
 
 ## 固件进度
 
-已在独立仓库 `D:/Workspace/KeyboardFirmware/keyboards/keychron/q6_pro/ansi_encoder/keymaps/custom` 创建固件 keymap。
-原样保留 via 键位和旋钮映射；新增 VIA 自定义通道、GET_INFO、快照事务、RAM 双缓冲和 RGB 覆盖层。
+2026-10-04：已同步官方 `wls_2025q1` 分支，固定到 `c8b2b237b4ef09765e48cbb5c1fdb0afd164289f`。
+新的固件工作树为 `D:/Workspace/StatusDisplay/.firmware-stage/qmk-wls_2025q1`，Git 分支为 `hostled/wls-2025q1`；custom 位于其中的 `keyboards/keychron/q6_pro/ansi_encoder/keymaps/custom`。
+采用新分支原始 via 键位和旋钮映射；新增 VIA 自定义通道、GET_INFO、快照事务、RAM 双缓冲和 RGB 覆盖层。
 完整协议见 docs/protocol.md：每包 2 个 LED 项，最大 54 包；会话/事务隔离、缺包查询、重复包校验和 5 秒 staging 超时。
 17 组 C 协议测试及 QMK 接入层替身测试已通过（GCC + ASan/UBSan），实际安装文件与受测文件哈希一致。
 新增 8 组跨语言端到端场景，涵盖 121 次报文交互和 39 次完整 LED 画面检查；复现方式见 [模拟测试说明](tests/HostLed.EndToEnd/README.md)。
-2026-10-04：依赖安装后，已通过 WSL Ubuntu-24.04 / QMK CLI 1.2.0 / ARM GCC 13.2.1 完成目标固件编译和链接。
-产物：`D:/Workspace/KeyboardFirmware/keychron_q6_pro_ansi_encoder_custom.bin`，最终文件 67,228 字节。尚未刷写或完成实机验证。
-修复公共构建文件 `keyboards/keychron/common/common.mk`：仅在 `DEBOUNCE_TYPE` 为 `custom` 时引入动态消抖，与现有 `keychron_common.mk` 的条件一致；Q6 Pro 使用 QMK 默认消抖，避免重复实现和 EEPROM 配置冲突。未修改 EEPROM 布局、扫描代码、蓝牙、RGB 驱动或 VIA 实现。
+原方案曾成功生成 `D:/Workspace/KeyboardFirmware/keychron_q6_pro_ansi_encoder_custom.bin`（67,228 字节）。这是迁移前的产物。
+新分支依赖已经按 gitlink 指定版本安装，ARM 编译和链接通过。新产物为 `.firmware-stage/qmk-wls_2025q1/keychron_q6_pro_ansi_encoder_custom.bin`，最终文件 67,856 字节；SHA256 及验证记录见版本核对文档。该分支已移除原先无条件引入动态消抖的代码，不再移植旧公共构建修复。
+Launcher 官方最新固件是 V1.1.0，但此公开分支仍标注 `device_version: "1.0.1"`，尚未确认两者对应的源码关系。刷写保持暂停，不能把新分支编译结果称为官方 V1.1.0 加 Host LED。
 
-在 WSL 激活 `/home/rcrxy/.local/share/hostled-qmk-venv/bin/activate` 后，从 `/mnt/d/Workspace/KeyboardFirmware` 执行：
+在 WSL 激活 `/home/rcrxy/.local/share/hostled-qmk-venv/bin/activate` 后，从 `/mnt/d/Workspace/StatusDisplay/.firmware-stage/qmk-wls_2025q1` 执行：
 
 ```sh
 qmk compile -j 8 -kb keychron/q6_pro/ansi_encoder -km custom
@@ -51,6 +53,6 @@ creationOrder 唯一且小于 nextCreationOrder；后者是不可回退的创建
 
 ## 数据依据
 
-data/q6-pro-ansi.json 从本机 Keychron 固件工作树的实际 info.json 提取，记录源提交和路径，共 108 个 LED 坐标。
+data/q6-pro-ansi.json 已与新分支的实际 keyboard.json 逐项核对并更新来源提交，共 108 个 LED 坐标；坐标及 LED 排列顺序与原方案一致。
 该元数据用于离线校验；实际设备与固件仍需握手和实机确认。
 现有 1.md 为用户原始讨论记录，保留不变。
