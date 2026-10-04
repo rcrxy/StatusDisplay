@@ -8,6 +8,7 @@ Windows 结算状态规则，QMK 固件显示最终 RGB 覆盖。本项目已开
 ## 当前完成范围
 
 .NET 10 离线 CLI：严格 JSON 校验、配置原子保存、创建顺序维护检查、规则结算与重载、LED 项二进制编码。
+另提供 `SnapshotReportCodec` 完整 32 字节事务报文编码，已通过真实固件 C 代码的离线端到端回放；尚未接入 CLI 的 HID 发送。
 Windows 尚未实现 HID 设备访问、音频自动监听、文件自动热重载和开机启动。
 render 使用明确传入的模拟设备 ID，不读取 Windows 实际音频状态。
 
@@ -17,6 +18,7 @@ render 使用明确传入的模拟设备 ID，不读取 Windows 实际音频状�
 原样保留 via 键位和旋钮映射；新增 VIA 自定义通道、GET_INFO、快照事务、RAM 双缓冲和 RGB 覆盖层。
 完整协议见 docs/protocol.md：每包 2 个 LED 项，最大 54 包；会话/事务隔离、缺包查询、重复包校验和 5 秒 staging 超时。
 17 组 C 协议测试及 QMK 接入层替身测试已通过（GCC + ASan/UBSan），实际安装文件与受测文件哈希一致。
+新增 8 组跨语言端到端场景，涵盖 121 次报文交互和 39 次完整 LED 画面检查；复现方式见 [模拟测试说明](tests/HostLed.EndToEnd/README.md)。
 2026-10-04：依赖安装后，已通过 WSL Ubuntu-24.04 / QMK CLI 1.2.0 / ARM GCC 13.2.1 完成目标固件编译和链接。
 产物：`D:/Workspace/KeyboardFirmware/keychron_q6_pro_ansi_encoder_custom.bin`，最终文件 67,228 字节。尚未刷写或完成实机验证。
 修复公共构建文件 `keyboards/keychron/common/common.mk`：仅在 `DEBOUNCE_TYPE` 为 `custom` 时引入动态消抖，与现有 `keychron_common.mk` 的条件一致；Q6 Pro 使用 QMK 默认消抖，避免重复实现和 EEPROM 配置冲突。未修改 EEPROM 布局、扫描代码、蓝牙、RGB 驱动或 VIA 实现。
